@@ -4,9 +4,7 @@ The NFT Sales is not only an investment opportunity. It is also a part of the ga
 ### Merkle tree construction
 Merkle tree in this repo is constructed in the same way with [merkle tree js library](https://github.com/miguelmota/merkletreejs) with the following hash function:
 ```js
-const leaves = data.tokens.map((token) => {
-  return hashOneToken(token);
-})
+const leaves = _map(data, token => utils.hashOneToken(token.id, token))
 
 const tree = new MerkleTree(leaves, keccak256, {sort: true});
 ```
