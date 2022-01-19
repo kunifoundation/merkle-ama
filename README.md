@@ -1,26 +1,42 @@
 # Merkle Saru
 The NFT Sales is not only an investment opportunity. It is also a part of the game where users can help activate 10000 Kuni Saru NFTs to reconstruct the world of Aeprian. 
 
-The sale will have 10000 boxes that cost the same price (0.4 BNB in private sale round, 0.5 BNB in public sale round). If you want to own Kuni Saru NFTs, you must buy the boxes. Then you open the boxes to get the Sarus.
+### Merkle tree construction
+Merkle tree in this repo is constructed in the same way with [merkle tree js library](https://github.com/miguelmota/merkletreejs) with the following hash function:
+```js
+const leaves = data.tokens.map((token) => {
+  return hashOneToken(token);
+})
 
-**We need to ensure that all buyers (team, private sale buyers, public sale buyers) have the same opportunity to get the rarest Saru.** So the sale will be organized the same as a lottery sale. It means that nobody knows which Kuni Saru they will get when they buy the box, and the value of the box will be determined by a random number that is created after the sale is complete.
+const tree = new MerkleTree(leaves, keccak256, {sort: true});
+```
+Where `hashOneToken` is a function to hash 1 NFT data as the following pseudo-code:
+```
+id = tokenId of the Saru NFT.
+attrNames = All of the Saru NFT's attribute names sorted alphabetically.
+attrValues = All of the attribute values, in the corresponding order to attributeNames.
+imgMD5 = MD5 of the main photo.
+name = Name of the NFT.
 
-The Kuni Saru inner the box will be calculated from ID for the box and the random number by the formal below:
-`SARU_TOKEN_ID = 1 + ((RANDOM_NUMBER + BOX_TOKEN_ID) % 10000)`
+return hash = keccak256(abiEncode(
+  id, attrNames, attrValues, imgMD5, name
+))
+```
 
-And now, how we generate the fair random number. See the formal below:
+### How to run the tool
+#### Node.js (Install)
+Requirements:
+- Node.js
+- npm (Node.js package manager)
 
-`RANDOM_NUMBER = SUM(BUYER_WALLET_ADDRESS + BLOCK_HASH)`
+#### To Amakuni team
+In order to calculate merkle root and proofs for all NFT data.
+1. Get all of the necessary NFT's data from Amakuni using your NFT's `tokenUri(id)` function. The team will publish the software to automatically and easily calculate the proof from the NFT Data. So people can verify the proof every time they want. If the proof is changed, they can report it to the team and the community.
+1. Get `MERKLE_ROOT_PUBLIC` from `Sale` contract.
+1. set your current directory to the root directory of the repo.
+1. `npm install` to install all of the dependencies.
+1. `npm run build` to install all of the dependencies.
+1. `node build/app.js [MERKLE_ROOT_PUBLIC]` function to Get Metadata, calculate the merkle tree and merkle proof verification. If it returns `True`, the data is fine, otherwise it is not.
 
-We will have over 6000 buyers using different wallet addresses. They also buy the boxes at different block hashes. So the total number of the buyer's wallet address and block hash can be considered a fair random number.
 
-### What if miners control the random number?
-As we know, in a public blockchain, the miners are powerful. They can control the block hash by adding or removing the transactions in the block. So they can manage the random number.
-Before and during the sale, people (except the team) don't know what SARU_TOKEN_ID is the rarest Kuni Saru. So even if the miners can control the random number, they don't know what they need to do to get the rarest Kuni Saru.
 
-### What if the team updates the ID of the rarest Kuni Saru?
-Before the sale, the team will publish proof of the NFT metadata and ID. If the team updates any metadata or ID, the proof will be changed. Any people can verify it by the algorithm below:
-
-`PROOF_HASH = Merkle_Tree(Metadata + ID)`
-
-The team will publish the software to automatically and easily calculate the proof from the NFT Data. So people can verify the proof every time they want. If the proof is changed, they can report it to the team and the community.

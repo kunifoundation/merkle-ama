@@ -1,45 +1,29 @@
 import path from 'path'
 import fs from 'fs'
 import * as _ from 'lodash';
-const argv = process.argv
-
-
+import {fetchData} from './utils';
 import parseData from './parse-data';
 import verifyProof from './verify-proof';
-const filename = argv[2]
-const randomizedIndex = 12
 
-// const argv = process.argv
+const TOTAL_SUPPLY = 50
+const argv = process.argv
+const MERKLE_ROOT_PUBLIC = argv[2]
 
-const main = () => {
-  let rs = fs.readFileSync(path.join(__dirname, '../', filename), {encoding: 'utf-8'})
-  rs = JSON.parse(rs)
-  let data = {tokens: []}
-  rs.tokens.forEach((item, inx) => {
-    console.log(((inx + randomizedIndex + 1) % _.size(rs.tokens)) + 1);
-    data.tokens.push(rs.tokens[((inx + randomizedIndex + 1) % _.size(rs.tokens)) + 1])
-  })
-  console.log(data.tokens);
-  // data = parseData(data)
-  // console.log(data);
-  // const json = JSON.stringify(data, null, 2)
-  // fs.writeFileSync(path.join(__dirname, '../', 'merkle_data.json'), json)
 
+const mainApi = async () => {
+  const fData = _.range(0, TOTAL_SUPPLY, 1).map(tokenId => fetchData('https://cjqvfn6rle.execute-api.us-east-2.amazonaws.com/api/saru', tokenId + 1))
+  let data = await Promise.all(fData)
+  data = parseData(data)
+  console.log("Merkle Root", data.root);
   console.log(`Verify all proofs in the merkle data:`);
-  let merkleData = JSON.parse(fs.readFileSync(path.join(__dirname, '../', `merkle_data.json`)), { encoding: 'utf8' });
-  const merkleRoot = merkleData.root;
-
-  merkleData.tokens.forEach((token, index) => {
-    const proof = token.proof;
-    const tokenData = data.tokens[index];
-    const boxId = index + 1
-    if (!verifyProof(merkleRoot, boxId, randomizedIndex, tokenData, proof, _.size(data.tokens))) {
-      console.log('Failed at id: ' + boxId + '. Abort.');
-      // process.exit();
+  _.forEach(data.tokens, ({proof, id, name, image, attributes }) => {
+    if (!verifyProof(proof, MERKLE_ROOT_PUBLIC, id, {name, image, attributes})) {
+      console.log('Failed at id: ' + id + '. Abort.');
+      process.exit();
     }
-  });
+  })
+
   console.log('All passed successfully.');
 }
 
-main()
-// console.log(process.argv.slice(2).argv);
+mainApi()

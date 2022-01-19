@@ -40,7 +40,7 @@ contracts/
 .dockerignore
 scripts
 *.zip
-shipher/*
-shipher
 merkle_data.json
 saru.json
+merkle_data_test.*
+index.html
