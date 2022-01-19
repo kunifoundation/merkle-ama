@@ -29,7 +29,7 @@ Requirements:
 - Node.js
 - npm (Node.js package manager)
 
-#### To Amakuni team
+#### Usage
 In order to calculate merkle root and proofs for all NFT data.
 1. Get all of the necessary NFT's data from Amakuni using your NFT's `tokenUri(id)` function. The team will publish the software to automatically and easily calculate the proof from the NFT Data. So people can verify the proof every time they want. If the proof is changed, they can report it to the team and the community.
 1. Get `MERKLE_ROOT_PUBLIC` from `Sale` contract.
