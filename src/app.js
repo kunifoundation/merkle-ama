@@ -25,8 +25,8 @@ const fetchPart = async (from, to) => {
 }
 
 const failed = (data) => {
-  const rs = _.find(data, item => item === null)
-  if (rs) {
+  const index = _.findIndex(data, item => item === null)
+  if (index >=0) {
     console.log('Failed: ' + rs + '. Abort.');
     process.exit();
   }
@@ -149,5 +149,4 @@ const mainApi = async () => {
   const diff = ((new Date()).getTime() - now.getTime()) / 1000
   console.log('All passed successfully.', `${diff}s`);
 }
-
 mainApi()
