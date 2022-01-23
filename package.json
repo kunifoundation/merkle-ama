@@ -7,7 +7,7 @@
   "repository": "https://github.com/AMAKUNIcom/merkle-ama.git",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --exec babel-node ./src/app.js",
+    "dev": "nodemon --exec babel-node ./src/app.js 0x435c646e6851c003879f8e6f9576977ac489755c8ca5c947db03c7e86887c27d",
     "build": "babel ./src --out-dir build"
   },
   "dependencies": {

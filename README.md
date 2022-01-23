@@ -13,11 +13,11 @@ Where `hashOneToken` is a function to hash 1 NFT data as the following pseudo-co
 id = tokenId of the Saru NFT.
 attrNames = All of the Saru NFT's attribute names sorted alphabetically.
 attrValues = All of the attribute values, in the corresponding order to attributeNames.
-imgMD5 = MD5 of the main photo.
+imageUrl = Url image of the main photo.
 name = Name of the NFT.
 
 return hash = keccak256(abiEncode(
-  id, attrNames, attrValues, imgMD5, name
+  id, attrNames, attrValues, imageUrl, name
 ))
 ```
 
