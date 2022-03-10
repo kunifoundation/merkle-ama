@@ -18,8 +18,7 @@ function wait(waitTime) {
 }
 
 const fetchPart = async (from, to) => {
-  // console.log('from: ', from, to);
-  const fData = _.range(from, to, 1).map(tokenId => fetchData('https://cjqvfn6rle.execute-api.us-east-2.amazonaws.com/api/saru', tokenId + 1))
+  const fData = _.range(from, to, 1).map(tokenId => fetchData('https://cjqvfn6rle.execute-api.us-east-2.amazonaws.com/api/kuni-saru', tokenId + 1))
   const data = await Promise.all(fData)
   return data
 }
