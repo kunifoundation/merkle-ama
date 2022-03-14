@@ -36,5 +36,7 @@ In order to get metadata, calculate, verification merkle root and proofs for all
 1. `npm run build` to install all of the dependencies.
 1. `node build/app.js [MERKLE_ROOT_PUBLIC]` function to Get Metadata, calculate the merkle tree and merkle proof verification. If it returns `True`, the data is fine, otherwise it is not.
 
+#### Merkle root public: `0x435c646e6851c003879f8e6f9576977ac489755c8ca5c947db03c7e86887c27d`
+
 
 
