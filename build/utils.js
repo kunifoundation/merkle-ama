@@ -41,7 +41,7 @@ var normalizeOneToken = function normalizeOneToken(tokenId, _ref) {
       var value = _ref3.value;
       return value;
     }),
-    imgMD5: image,
+    imageUrl: image,
     name: name
   };
 };
@@ -53,10 +53,10 @@ var hashOneToken = function hashOneToken(tokenId, token) {
       id = _normalizeOneToken.id,
       attrNames = _normalizeOneToken.attrNames,
       attrValues = _normalizeOneToken.attrValues,
-      imgMD5 = _normalizeOneToken.imgMD5,
+      imageUrl = _normalizeOneToken.imageUrl,
       name = _normalizeOneToken.name;
 
-  return keccak256(defaultAbiCoder.encode(['uint256', 'string[]', 'string[]', 'string', 'string'], [id, attrNames, attrValues, imgMD5, name]));
+  return keccak256(defaultAbiCoder.encode(['uint256', 'string[]', 'string[]', 'string', 'string'], [id, attrNames, attrValues, imageUrl, name]));
 };
 
 exports.hashOneToken = hashOneToken;
@@ -74,7 +74,8 @@ var fetchData = /*#__PURE__*/function () {
                   id: tokenId
                 }));
               })["catch"](function (err) {
-                return reject(err);
+                console.log("Download Error TokenId: ".concat(tokenId));
+                resolve(null);
               });
             }));
 

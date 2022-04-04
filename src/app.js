@@ -18,7 +18,7 @@ function wait(waitTime) {
 }
 
 const fetchPart = async (from, to) => {
-  const fData = _.range(from, to, 1).map(tokenId => fetchData('https://cjqvfn6rle.execute-api.us-east-2.amazonaws.com/api/kuni-saru', tokenId + 1))
+  const fData = _.range(from, to, 1).map(tokenId => fetchData('http://cjqvfn6rle.execute-api.us-east-2.amazonaws.com/api/kuni-saru', tokenId + 1))
   const data = await Promise.all(fData)
   return data
 }
@@ -26,7 +26,7 @@ const fetchPart = async (from, to) => {
 const failed = (data) => {
   const index = _.findIndex(data, item => item === null)
   if (index >=0) {
-    console.log('Failed: ' + rs + '. Abort.');
+    console.log('Failed: ' + index + '. Abort.');
     process.exit();
   }
   
@@ -135,7 +135,7 @@ const mainApi = async () => {
   failed(data)
   dataRS = _.concat(dataRS, data)
   console.log('Download Done', dataRS.length, 'Saru hero.');
-  data = parseData(data)
+  data = parseData(dataRS)
   console.log("Merkle Root", data.root);
   console.log(`Verify all proofs in the merkle data:`);
   const merkle_root = MERKLE_ROOT_PUBLIC || data.root
